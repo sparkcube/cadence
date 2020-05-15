@@ -356,10 +356,10 @@ func (e *historyEngineImpl) Start() {
 
 	clusterMetadata := e.shard.GetClusterMetadata()
 	if e.replicatorProcessor != nil &&
-		clusterMetadata.GetReplicationConsumerConfig().Type != config.ReplicationConsumerTypeRPC &&
-		e.config.EnableKafkaReplication() {
-		e.replicatorProcessor.Start()
-	}
+		(clusterMetadata.GetReplicationConsumerConfig().Type != config.ReplicationConsumerTypeRPC ||
+		e.config.EnableKafkaReplication()) {
+			e.replicatorProcessor.Start()
+		}
 
 	for _, replicationTaskProcessor := range e.replicationTaskProcessors {
 		replicationTaskProcessor.Start()
